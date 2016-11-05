@@ -3,9 +3,9 @@ package org.devathon.contest2016.containers;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
-import org.devathon.contest2016.MachinePart;
+import org.devathon.contest2016.HoldingMachine;
 
-public abstract class Container implements MachinePart{
+public abstract class Container implements HoldingMachine{
 
     private Block block;
 

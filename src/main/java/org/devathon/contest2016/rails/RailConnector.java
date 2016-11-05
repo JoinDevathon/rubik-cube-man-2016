@@ -1,7 +1,9 @@
 package org.devathon.contest2016.rails;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.devathon.contest2016.util.RelativeLoc;
 
 public enum RailConnector{
 
@@ -43,5 +45,23 @@ public enum RailConnector{
                 return connector;
         }
         return RailConnector.NORTH;
+    }
+
+    public static RelativeLoc getPosInBlock(RailConnector from, RailConnector to, double amount){
+        RelativeLoc loc;
+        if (amount <= 0.5){
+            double modX = 0.5 + ((((double) from.getDirection().getModX()) * (0.5 - amount)));
+            double modZ = 0.5 + ((((double) from.getDirection().getModZ()) * (0.5 - amount)));
+            loc = new RelativeLoc(modX, 0, modZ);
+        } else {
+            double modX = 0.5 + ((((double) to.getDirection().getModX()) * (amount - 0.5)));
+            double modZ = 0.5 + ((((double) to.getDirection().getModZ()) * (amount - 0.5)));
+            loc = new RelativeLoc(modX, 0, modZ);
+        }
+        if (to.isUpper())
+            loc.setY(amount);
+        else if (from.isUpper())
+            loc.setY(1.0 - amount);
+        return loc;
     }
 }

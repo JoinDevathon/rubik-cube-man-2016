@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.devathon.contest2016.MachinePart;
 import org.devathon.contest2016.containers.Container;
+import org.devathon.contest2016.items.MovingItem;
 
 public class RailHandler implements Listener{
 
@@ -22,12 +23,14 @@ public class RailHandler implements Listener{
     public void blockRedstone(BlockRedstoneEvent event){
         if (event.getBlock().getType() == Material.ACTIVATOR_RAIL){
             SuckyRail rail = new SuckyRail(event.getBlock());
-            MachinePart[] parts = rail.getConnectedParts();
-            for (MachinePart part : parts){
+            RailConnector[] parts = rail.getConnections();
+            for (RailConnector connector : parts){
+                MachinePart part = rail.getRelative(connector);
                 if (part instanceof Container){
                     Container container = (Container) part;
                     ItemStack stack = container.getAndRemoveFirst();
-
+                    if (stack != null)
+                        new MovingItem(stack, rail, connector);
                     return;
                 }
             }

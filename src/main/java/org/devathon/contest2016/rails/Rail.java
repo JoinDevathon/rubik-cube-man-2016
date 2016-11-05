@@ -1,5 +1,6 @@
 package org.devathon.contest2016.rails;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.material.Rails;
@@ -46,7 +47,7 @@ public abstract class Rail implements MachinePart{
         }
         switch (direction){
             case EAST:
-                return new RailConnector[]{RailConnector.EAST, RailConnector.NORTH};
+                return new RailConnector[]{RailConnector.EAST, RailConnector.WEST};
             case SOUTH:
                 return new RailConnector[]{RailConnector.SOUTH, RailConnector.NORTH};
         }
@@ -81,5 +82,10 @@ public abstract class Rail implements MachinePart{
 
     public Block getBlock(){
         return block;
+    }
+
+    @Override
+    public Location getLocation(){
+        return block.getLocation();
     }
 }
