@@ -68,8 +68,7 @@ public abstract class Rail implements MachinePart{
         RailConnector[] connectors = getConnections();
         Set<MachinePart> parts = new HashSet<>(connectors.length);
         for (RailConnector connector : connectors){
-            Block newBlock = connector.getBlockRelative(block);
-            MachinePart part = MachinePart.partFromBlock(newBlock);
+            MachinePart part = connector.getRelative(block);
             if (part != null)
                 parts.add(part);
         }

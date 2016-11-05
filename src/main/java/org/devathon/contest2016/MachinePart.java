@@ -23,8 +23,7 @@ public interface MachinePart{
 
     default MachinePart getRelative(RailConnector connector){
         Location loc = getLocation().clone();
-        Block block = connector.getBlockRelative(loc.getBlock());
-        return partFromBlock(block);
+        return connector.getRelative(loc.getBlock());
     }
 
     Location getLocation();

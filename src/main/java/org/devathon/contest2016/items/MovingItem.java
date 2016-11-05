@@ -1,6 +1,5 @@
 package org.devathon.contest2016.items;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;

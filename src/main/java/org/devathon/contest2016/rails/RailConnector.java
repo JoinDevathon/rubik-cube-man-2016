@@ -1,8 +1,8 @@
 package org.devathon.contest2016.rails;
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.devathon.contest2016.MachinePart;
 import org.devathon.contest2016.util.RelativeLoc;
 
 public enum RailConnector{
@@ -37,6 +37,16 @@ public enum RailConnector{
         if (upper)
             block = block.getRelative(BlockFace.UP);
         return block;
+    }
+
+    public MachinePart getRelative(Block block){
+        block = block.getRelative(direction);
+        if (upper)
+            block = block.getRelative(BlockFace.UP);
+        MachinePart part = MachinePart.partFromBlock(block);
+        if (part == null && !upper)
+            part = MachinePart.partFromBlock(block.getRelative(BlockFace.DOWN));
+        return part;
     }
 
     public static RailConnector getByDirection(BlockFace face, boolean upper){
