@@ -59,7 +59,7 @@ public class MovingItem{
     private void moveOn(){
         MachinePart part = on.getRelative(to);
         if (part == null){
-            stand.remove();
+            remove(false);
             exists = false;
         } else if (part instanceof Rail){
             on = (Rail) part;
@@ -79,8 +79,10 @@ public class MovingItem{
         } else if (part instanceof HoldingMachine){
             HoldingMachine machine = (HoldingMachine) part;
             boolean accepted = machine.acceptItem(this);
-            if (!accepted)
-                stand.remove();
+            remove(accepted);
+            exists = false;
+        } else {
+            remove(false);
             exists = false;
         }
     }

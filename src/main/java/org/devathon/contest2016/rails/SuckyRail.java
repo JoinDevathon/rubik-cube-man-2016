@@ -7,6 +7,4 @@ public class SuckyRail extends Rail{
     public SuckyRail(Block block){
         super(block);
     }
-
-
 }

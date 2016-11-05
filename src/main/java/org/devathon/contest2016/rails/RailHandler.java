@@ -21,7 +21,7 @@ public class RailHandler implements Listener{
 
     @EventHandler
     public void blockRedstone(BlockRedstoneEvent event){
-        if (event.getBlock().getType() == Material.ACTIVATOR_RAIL){
+        if (event.getNewCurrent() > 0 && event.getBlock().getType() == Material.ACTIVATOR_RAIL){
             SuckyRail rail = new SuckyRail(event.getBlock());
             RailConnector[] parts = rail.getConnections();
             for (RailConnector connector : parts){
