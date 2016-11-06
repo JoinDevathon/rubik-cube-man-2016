@@ -21,6 +21,15 @@ As you can see in this image, once a redstone current is applied the the activat
 Putting items into chests is really easy, all you need to do is run rail into the side of the chest, and it'll take in the item. The only case in which it won't take in the item is if the inventory is full any it can't fit anywhere. In this case the item will pop of the tracks.
 
 
+## Fast rails
+
+<img src"https://i.imgur.com/OX7Vgnt.jpg" style="width:500px">
+
+If a rail is powered, it can be used as a speed boost for the items. The more you have in a row, the faster they'll hit.
+
+All rails also have friction, so if power rails aren't used all the time, the items will slow down, and eventually go to their normal speed.
+
+
 ## Creating the Crafting Machine
 
 <img src="https://i.imgur.com/SFi0xM4.png" style="width:500px">
