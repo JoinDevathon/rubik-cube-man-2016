@@ -1,73 +1,48 @@
-# Devathon Project
-This is the base layout for your Devathon Project. It includes several scripts to make running incredibly easy on Windows, Mac, and Linux.
+# Crafting Machines + Item Transportation
 
-## Help
+This is a plugin designed to help make crafting and transportation of items easier.
 
-Help will be available for 25 hours during the contest at the following sources:
-
-Twitter: https://twitter.com/JoinDevathon
-Discord: https://discordapp.com/invite/qNxMS5B
-
-## Theme
-
-The theme for the 2016 Devathon Contest is: **Machines!**
-Make a machine, make an interaction with a machine, or do something completely creative! As long as it has something to do with machines, you're good to go.
-
-## Reminders
-
-Finish by November 6th at 8AM Central Time. You can find this time in your local timezone here: https://encrypted.google.com/search?hl=en&q=8%20am%20central%20time
-
-## Rules
+Items are transported along rails and are crafted within a crafting Machine.
 
 
-1.  Teaming is not allowed.
-2.  No usage of public code & libraries.
-3.  Streaming is allowed.
-4.  Purposely copying another person’s idea is not allowed.
-5.  You are not allowed to use code written before the contest has started.
-6.  Code will be pushed regularly.
-7.  Binaries should not be pushed.
-8.  Accepting pull requests is not allowed.
-9.  Code must be able to compile, we will not fix compile errors.
-10. You must use Java 8.
-11. Your plugin must fit the theme or it will be disqualified.
-12. Maven is required.
+## Getting items out of chests
+
+<img src="https://i.imgur.com/GExi2ML.png" style="width:500px">
+
+To get items out of any accepted block, you need to use a activator rail (Also know as a sucky rail, because it sucks the items out).
+
+As you can see in this image, once a redstone current is applied the the activator rail it will pull out a single item. To pull more items out, you just need to apply redstone again.
 
 
-## Get Started
+## Putting items into chests
 
-**If you already know how to use Maven, then more than likely the following steps are irrelevant for you. Just do your usual thing.**
+<img src="https://i.imgur.com/kK6uuBv.png" style="width:500px">
 
----
+Putting items into chests is really easy, all you need to do is run rail into the side of the chest, and it'll take in the item. The only case in which it won't take in the item is if the inventory is full any it can't fit anywhere. In this case the item will pop of the tracks.
 
-Don't worry, we made a video! Check it out at https://www.youtube.com/watch?v=u5HXS0l-VwQ
 
----
+## Creating the Crafting Machine
 
-First things first, you need to have the Java JDK8 installed. You can find the appropriate version here: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+<img src="https://i.imgur.com/SFi0xM4.png" style="width:500px">
 
-Then you need to have git installed. You can find the appropriate version for your OS here: https://git-scm.com/
+The crafting machine can be crafted with this recipe. To use it, just place it down.
 
-There are no other required dependencies, however Maven is optional if you want to set up your own development environment outside of what we do for you.
 
-## Running
+## Choosing what to craft
 
-If you're on Windows, you'll want to run all of these commands inside Git Bash, which is a program installed when you installed Git. You can paste by right clicking inside of the window.
+<img src="https://i.imgur.com/UzvAgoi.png" style="width:500px">
 
-If you don't have this Git repository cloned yet, click on clone or download. If you have an SSH key on your account, use the SSH link. Otherwise use the HTTPS link if you want to use your GitHub username and password.
+You can change what the crafting machine will make by simply configuring the layout of the items in the 3x3 square in the centre, like you would in a normal crafting table.
 
-Then run
 
-```bash
-git clone <link>
-```
+## So how does this all go together
 
-To run your server, do:
+<img src="https://i.imgur.com/zN53hfT.png" style="width:500px">
 
-```bash
-./run-server.sh
-```
+As you can see here, if you feed items into the Crafting Machine, it will keep accepting them. When a activator rail then gets activated next to it, it will pull out the crafted item, assuming there is enough items to make it.
 
-On first run this will download and compile the Spigot version that you're using for the contest. Because you're using this exact version of Spigot for the entire contest, you can safely use CraftBukkit and Minecraft Server code.
+The crafted item can them be moved into a chest!
 
-This wrapper around the Spigot server has a few extra features that are not included inside of regular Spigot. If you type `stop` to stop the Minecraft Server, it'll automatically recompile your code and restart the server. To fully stop the server, type `exit` to safely stop the server and exit the recompilation loop. If you're on Windows, you won't have a `exit` command and will instead be asked every loop if you want to recompile.
+The Crafting Machine will only take items specificed in the recipe, other items will be rejected entry.
+
+The Crafting Machine also keep 1 copy of the item, so that it can use it as a template.
