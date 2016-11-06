@@ -211,13 +211,15 @@ public class CraftingMachine implements HoldingMachine, EditableMachine, Saveabl
     private ItemStack testShaped(ShapedRecipe sr, int column, int row){
         Map<Character, ItemStack> map = sr.getIngredientMap();
         String[] shape = sr.getShape();
-        int shapeHeight = shape.length;
-        int shapeWidth = shape[0].length();
+        boolean[] checked = new boolean[9];
+        for (int i = 0; i < checked.length; i++)
+            checked[i] = false;
         for (int i = 0; i < shape.length; i++){
             String aShape = shape[i];
             for (int j = 0; j < aShape.length(); j++){
                 char c = aShape.charAt(j);
                 int s = ((i + row) * 3) + (column + j);
+                checked[s] = true;
                 if (map.get(c) != null){
                     if (!match(map.get(c), iss[s]))
                         return null;
@@ -225,17 +227,9 @@ public class CraftingMachine implements HoldingMachine, EditableMachine, Saveabl
                     return null;
             }
         }
-        for (int i = 0; i < row; i++){
-            for (int j = 0; j < column; j++){
-                int s = (i * 3) + j;
-                if (iss[s] != null)
-                    return null;
-            }
-        }
-        for (int i = shapeHeight + row; i < 3; i++){
-            for (int j = shapeWidth + column; j < 3; j++){
-                int s = (i * 3) + j;
-                if (iss[s] != null)
+        for (int i = 0; i < checked.length; i++){
+            if (!checked[i]){
+                if (iss[i] != null)
                     return null;
             }
         }

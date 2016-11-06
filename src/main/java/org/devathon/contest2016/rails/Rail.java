@@ -105,4 +105,10 @@ public abstract class Rail implements MachinePart{
     public int hashCode(){
         return block != null ? block.hashCode() : 0;
     }
+
+    public abstract double calculateVelocity(double velocity);
+
+    public Rails getRails(){
+        return rails;
+    }
 }

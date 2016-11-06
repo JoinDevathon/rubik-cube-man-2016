@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.devathon.contest2016.containers.ChestContainer;
 import org.devathon.contest2016.machines.crafting.CraftingMachine;
 import org.devathon.contest2016.rails.NormalRail;
+import org.devathon.contest2016.rails.PoweredRail;
 import org.devathon.contest2016.rails.RailConnector;
 import org.devathon.contest2016.rails.SuckyRail;
 
@@ -16,6 +17,8 @@ public interface MachinePart{
                 return new NormalRail(block);
             case ACTIVATOR_RAIL:
                 return new SuckyRail(block);
+            case POWERED_RAIL:
+                return new PoweredRail(block);
             case CHEST:
                 return new ChestContainer(block);
             case WORKBENCH:

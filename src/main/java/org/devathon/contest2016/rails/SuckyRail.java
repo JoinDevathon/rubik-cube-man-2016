@@ -7,4 +7,9 @@ public class SuckyRail extends Rail{
     public SuckyRail(Block block){
         super(block);
     }
+
+    @Override
+    public double calculateVelocity(double velocity){
+        return velocity - 0.015;
+    }
 }

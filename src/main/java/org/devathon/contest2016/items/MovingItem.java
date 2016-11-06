@@ -19,6 +19,8 @@ import org.devathon.contest2016.util.Teleport;
 
 public class MovingItem implements SaveableObject{
 
+    private static final double MAX_VELOCITY = 0.5;
+    private static final double MIN_VELOCITY = 0.05;
     private ArmorStand stand;
     private Item item;
     private double amountThrough = 0;
@@ -32,7 +34,7 @@ public class MovingItem implements SaveableObject{
     }
 
     public MovingItem(ItemStack item, Rail on, RailConnector startConnector, RailConnector otherConnector){
-        this(item, on, startConnector, otherConnector, 0.05, 0);
+        this(item, on, startConnector, otherConnector, MIN_VELOCITY, 0);
     }
 
     public MovingItem(ItemStack item, Rail on, RailConnector startConnector, RailConnector otherConnector, double velocity, double amountThrough){
@@ -40,25 +42,26 @@ public class MovingItem implements SaveableObject{
         this.to = otherConnector;
         this.on = on;
         this.amountThrough = amountThrough;
-        this.velocity = velocity <= 0 ? 0.05 : velocity;
+        this.velocity = velocity <= MIN_VELOCITY ? MIN_VELOCITY : (velocity > MAX_VELOCITY ? MAX_VELOCITY : velocity);
         Location start = getLocation();
         if (!start.getChunk().isLoaded())
             start.getChunk().load();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(DevathonPlugin.getPlugin(DevathonPlugin.class), () -> {
-            if (!start.getChunk().isLoaded())
-                start.getChunk().load();
-            this.stand = (ArmorStand) start.getWorld().spawnEntity(start, EntityType.ARMOR_STAND);
-            this.item = start.getWorld().dropItem(start, item);
-            this.item.setPickupDelay(Integer.MAX_VALUE);
-            this.stand.setVisible(false);
-            this.stand.setPassenger(this.item);
-            this.stand.setGravity(false);
-            this.stand.setRemoveWhenFarAway(false);
-        });
+        if (!start.getChunk().isLoaded())
+            start.getChunk().load();
+        this.stand = (ArmorStand) start.getWorld().spawnEntity(start, EntityType.ARMOR_STAND);
+        this.item = start.getWorld().dropItem(start, item);
+        this.item.setPickupDelay(Integer.MAX_VALUE);
+        this.stand.setVisible(false);
+        this.stand.setPassenger(this.item);
+        this.stand.setGravity(false);
+        this.stand.setRemoveWhenFarAway(false);
         ItemHandler.getInstance().addItem(this);
     }
 
     public void move(){
+        velocity = on.calculateVelocity(velocity);
+        velocity = velocity < MIN_VELOCITY ? MIN_VELOCITY : velocity;
+        velocity = velocity > MAX_VELOCITY ? MAX_VELOCITY : velocity;
         amountThrough += velocity;
         while (amountThrough >= 1.0 && exists){
             amountThrough -= 1.0;
@@ -140,6 +143,7 @@ public class MovingItem implements SaveableObject{
 
     @Override
     public void save(ConfigurationSection section){
+        if (item == null) return;
         section.set("item", item.getItemStack());
         Utils.saveLocation(section, on.getLocation(), "loc");
         section.set("from", from.toString());

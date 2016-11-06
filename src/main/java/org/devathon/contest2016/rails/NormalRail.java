@@ -7,4 +7,9 @@ public class NormalRail extends Rail{
     public NormalRail(Block block){
         super(block);
     }
+
+    @Override
+    public double calculateVelocity(double velocity){
+        return velocity - 0.01;
+    }
 }
