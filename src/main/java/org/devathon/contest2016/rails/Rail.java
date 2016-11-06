@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.material.Rails;
+import org.devathon.contest2016.items.ItemHandler;
 import org.devathon.contest2016.machines.MachinePart;
 
 import java.util.HashSet;
@@ -90,7 +91,7 @@ public abstract class Rail implements MachinePart{
 
     @Override
     public void broken(){
-        //TODO Drop items on the rail.
+        ItemHandler.getInstance().railBreak(this);
     }
 
     @Override

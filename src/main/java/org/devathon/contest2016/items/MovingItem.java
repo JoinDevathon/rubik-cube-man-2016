@@ -167,4 +167,8 @@ public class MovingItem implements SaveableObject{
         }
         return null;
     }
+
+    public Rail getRail(){
+        return on;
+    }
 }
