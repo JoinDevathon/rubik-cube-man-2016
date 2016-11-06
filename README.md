@@ -23,7 +23,7 @@ Putting items into chests is really easy, all you need to do is run rail into th
 
 ## Fast rails
 
-<img src"https://i.imgur.com/OX7Vgnt.jpg" style="width:500px">
+<img src="https://i.imgur.com/OX7Vgnt.png" style="width:500px">
 
 If a rail is powered, it can be used as a speed boost for the items. The more you have in a row, the faster they'll hit.
 
