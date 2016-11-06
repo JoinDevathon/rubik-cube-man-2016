@@ -1,10 +1,12 @@
 package org.devathon.contest2016.machines.crafting;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,7 +25,7 @@ public class CraftingMachine implements HoldingMachine, EditableMachine{
 
     private static final int RESULT_SLOT = 16;
     private final Block block;
-    private final ItemStack[] iss;
+    private ItemStack[] iss;
     private final Inventory inv;
 
     public CraftingMachine(Block block){
@@ -31,6 +33,13 @@ public class CraftingMachine implements HoldingMachine, EditableMachine{
         if (!block.hasMetadata("items")){
             block.setMetadata("items", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), this.iss = new ItemStack[9]));
             block.setMetadata("inv", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), this.inv = createInventory()));
+            ArmorStand stand = (ArmorStand) block.getWorld().spawnEntity(block.getLocation().add(0.5, 1.0, 0.5), EntityType.ARMOR_STAND);
+            stand.setMarker(true);
+            stand.setVisible(false);
+            stand.setGravity(false);
+            stand.setCustomNameVisible(true);
+            stand.setCustomName(ChatColor.GOLD + "Crafting machine");
+            block.setMetadata("floatingtext", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), stand));
         } else {
             this.iss = (ItemStack[]) block.getMetadata("items").get(0).value();
             this.inv = (Inventory) block.getMetadata("inv").get(0).value();
@@ -281,6 +290,11 @@ public class CraftingMachine implements HoldingMachine, EditableMachine{
             if (is != null)
                 loc.getWorld().dropItemNaturally(loc, is);
         }
+        ArmorStand stand = (ArmorStand) block.getMetadata("floatingtext").get(0).value();
+        stand.remove();
         block.removeMetadata("craftingmachine", DevathonPlugin.getPlugin(DevathonPlugin.class));
+        block.removeMetadata("items", DevathonPlugin.getPlugin(DevathonPlugin.class));
+        block.removeMetadata("inv", DevathonPlugin.getPlugin(DevathonPlugin.class));
+        block.removeMetadata("floatingtext", DevathonPlugin.getPlugin(DevathonPlugin.class));
     }
 }
