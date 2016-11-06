@@ -1,18 +1,23 @@
 package org.devathon.contest2016.items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import org.devathon.contest2016.HoldingMachine;
-import org.devathon.contest2016.MachinePart;
+import org.devathon.contest2016.DevathonPlugin;
+import org.devathon.contest2016.config.SaveableObject;
+import org.devathon.contest2016.config.Utils;
+import org.devathon.contest2016.machines.HoldingMachine;
+import org.devathon.contest2016.machines.MachinePart;
 import org.devathon.contest2016.rails.Rail;
 import org.devathon.contest2016.rails.RailConnector;
 import org.devathon.contest2016.util.RelativeLoc;
 import org.devathon.contest2016.util.Teleport;
 
-public class MovingItem{
+public class MovingItem implements SaveableObject{
 
     private ArmorStand stand;
     private Item item;
@@ -27,16 +32,29 @@ public class MovingItem{
     }
 
     public MovingItem(ItemStack item, Rail on, RailConnector startConnector, RailConnector otherConnector){
+        this(item, on, startConnector, otherConnector, 0.05, 0);
+    }
+
+    public MovingItem(ItemStack item, Rail on, RailConnector startConnector, RailConnector otherConnector, double velocity, double amountThrough){
         this.from = startConnector;
         this.to = otherConnector;
         this.on = on;
+        this.amountThrough = amountThrough;
+        this.velocity = velocity <= 0 ? 0.05 : velocity;
         Location start = getLocation();
-        this.stand = (ArmorStand) start.getWorld().spawnEntity(start, EntityType.ARMOR_STAND);
-        this.item = start.getWorld().dropItem(start, item);
-        this.item.setPickupDelay(Integer.MAX_VALUE);
-        this.stand.setVisible(false);
-        this.stand.setPassenger(this.item);
-        this.stand.setGravity(false);
+        if (!start.getChunk().isLoaded())
+            start.getChunk().load();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(DevathonPlugin.getPlugin(DevathonPlugin.class), () -> {
+            if (!start.getChunk().isLoaded())
+                start.getChunk().load();
+            this.stand = (ArmorStand) start.getWorld().spawnEntity(start, EntityType.ARMOR_STAND);
+            this.item = start.getWorld().dropItem(start, item);
+            this.item.setPickupDelay(Integer.MAX_VALUE);
+            this.stand.setVisible(false);
+            this.stand.setPassenger(this.item);
+            this.stand.setGravity(false);
+            this.stand.setRemoveWhenFarAway(false);
+        });
         ItemHandler.getInstance().addItem(this);
     }
 
@@ -105,5 +123,46 @@ public class MovingItem{
 
     public Item getItem(){
         return item;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovingItem that = (MovingItem) o;
+        return stand != null ? stand.equals(that.stand) : that.stand == null;
+    }
+
+    @Override
+    public int hashCode(){
+        return stand != null ? stand.hashCode() : 0;
+    }
+
+    @Override
+    public void save(ConfigurationSection section){
+        section.set("item", item.getItemStack());
+        Utils.saveLocation(section, on.getLocation(), "loc");
+        section.set("from", from.toString());
+        section.set("to", to.toString());
+        section.set("amountThrough", amountThrough);
+        section.set("velocity", velocity);
+    }
+
+    public static MovingItem load(ConfigurationSection section){
+        Location loc = Utils.loadLocation(section, "loc");
+        if (loc == null)
+            return null;
+        if (!loc.getChunk().isLoaded())
+            loc.getChunk().load();
+        MachinePart part = MachinePart.partFromBlock(loc.getBlock());
+        if (part instanceof Rail){
+            ItemStack item = section.getItemStack("item");
+            RailConnector from = RailConnector.valueOf(section.getString("from"));
+            RailConnector to = RailConnector.valueOf(section.getString("to"));
+            double amountThrough = section.getDouble("amountThrough");
+            double velocity = section.getDouble("velocity");
+            return new MovingItem(item, (Rail) part, from, to, velocity, amountThrough);
+        }
+        return null;
     }
 }

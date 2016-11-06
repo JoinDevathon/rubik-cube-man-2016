@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
-import org.devathon.contest2016.HoldingMachine;
+import org.devathon.contest2016.machines.HoldingMachine;
 import org.devathon.contest2016.items.MovingItem;
 
 public abstract class Container implements HoldingMachine{
@@ -72,4 +72,17 @@ public abstract class Container implements HoldingMachine{
     public abstract ItemStack[] getContents();
 
     public abstract void setContents(ItemStack[] items);
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Container container = (Container) o;
+        return block != null ? block.equals(container.block) : container.block == null;
+    }
+
+    @Override
+    public int hashCode(){
+        return block != null ? block.hashCode() : 0;
+    }
 }

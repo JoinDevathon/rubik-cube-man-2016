@@ -2,7 +2,7 @@ package org.devathon.contest2016.rails;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.devathon.contest2016.MachinePart;
+import org.devathon.contest2016.machines.MachinePart;
 import org.devathon.contest2016.util.RelativeLoc;
 
 public enum RailConnector{

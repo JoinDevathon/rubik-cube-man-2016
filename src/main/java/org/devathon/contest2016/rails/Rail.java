@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.material.Rails;
-import org.devathon.contest2016.MachinePart;
+import org.devathon.contest2016.machines.MachinePart;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -91,5 +91,18 @@ public abstract class Rail implements MachinePart{
     @Override
     public void broken(){
         //TODO Drop items on the rail.
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rail rail = (Rail) o;
+        return block != null ? block.equals(rail.block) : rail.block == null;
+    }
+
+    @Override
+    public int hashCode(){
+        return block != null ? block.hashCode() : 0;
     }
 }

@@ -11,6 +11,8 @@ public class Teleport{
     }
 
     private static void teleport(Entity e, Location loc){
+        if (!loc.getChunk().isLoaded())
+            loc.getChunk().load();
         e.setPosition(loc.getX(), loc.getY(), loc.getZ());
     }
 }

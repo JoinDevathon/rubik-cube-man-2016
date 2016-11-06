@@ -1,4 +1,4 @@
-package org.devathon.contest2016;
+package org.devathon.contest2016.machines;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;

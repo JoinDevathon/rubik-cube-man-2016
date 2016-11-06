@@ -1,4 +1,4 @@
-package org.devathon.contest2016;
+package org.devathon.contest2016.machines;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

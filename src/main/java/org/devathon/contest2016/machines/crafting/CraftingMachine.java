@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -15,13 +16,15 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.devathon.contest2016.DevathonPlugin;
-import org.devathon.contest2016.EditableMachine;
-import org.devathon.contest2016.HoldingMachine;
+import org.devathon.contest2016.config.SaveableObject;
+import org.devathon.contest2016.config.Utils;
+import org.devathon.contest2016.machines.EditableMachine;
+import org.devathon.contest2016.machines.HoldingMachine;
 import org.devathon.contest2016.items.MovingItem;
 
 import java.util.*;
 
-public class CraftingMachine implements HoldingMachine, EditableMachine{
+public class CraftingMachine implements HoldingMachine, EditableMachine, SaveableObject{
 
     private static final int RESULT_SLOT = 16;
     private final Block block;
@@ -33,17 +36,32 @@ public class CraftingMachine implements HoldingMachine, EditableMachine{
         if (!block.hasMetadata("items")){
             block.setMetadata("items", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), this.iss = new ItemStack[9]));
             block.setMetadata("inv", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), this.inv = createInventory()));
-            ArmorStand stand = (ArmorStand) block.getWorld().spawnEntity(block.getLocation().add(0.5, 1.0, 0.5), EntityType.ARMOR_STAND);
-            stand.setMarker(true);
-            stand.setVisible(false);
-            stand.setGravity(false);
-            stand.setCustomNameVisible(true);
-            stand.setCustomName(ChatColor.GOLD + "Crafting machine");
-            block.setMetadata("floatingtext", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), stand));
+            block.setMetadata("craftingmachine", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), "MasterHub"));
+            createArmourStand();
         } else {
             this.iss = (ItemStack[]) block.getMetadata("items").get(0).value();
             this.inv = (Inventory) block.getMetadata("inv").get(0).value();
         }
+    }
+
+    private CraftingMachine(Location loc, ItemStack[] iss){
+        this.block = loc.getBlock();
+        block.setMetadata("items", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), this.iss = iss));
+        block.setMetadata("inv", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), this.inv = createInventory()));
+        block.setMetadata("craftingmachine", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), "MasterHub"));
+        createArmourStand();
+        setContents(iss);
+    }
+
+    private void createArmourStand(){
+        ArmorStand stand = (ArmorStand) block.getWorld().spawnEntity(block.getLocation().add(0.5, 1.0, 0.5), EntityType.ARMOR_STAND);
+        stand.setMarker(true);
+        stand.setVisible(false);
+        stand.setGravity(false);
+        stand.setCustomNameVisible(true);
+        stand.setCustomName(ChatColor.GOLD + "Crafting machine");
+        stand.setRemoveWhenFarAway(false);
+        block.setMetadata("floatingtext", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), stand));
     }
 
     private Inventory createInventory(){
@@ -296,5 +314,35 @@ public class CraftingMachine implements HoldingMachine, EditableMachine{
         block.removeMetadata("items", DevathonPlugin.getPlugin(DevathonPlugin.class));
         block.removeMetadata("inv", DevathonPlugin.getPlugin(DevathonPlugin.class));
         block.removeMetadata("floatingtext", DevathonPlugin.getPlugin(DevathonPlugin.class));
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CraftingMachine that = (CraftingMachine) o;
+        return block != null ? block.equals(that.block) : that.block == null;
+    }
+
+    @Override
+    public int hashCode(){
+        return block != null ? block.hashCode() : 0;
+    }
+
+    @Override
+    public void save(ConfigurationSection section){
+        for (int i = 0; i < 9; i++)
+            section.set("items." + i, iss[i]);
+        Utils.saveLocation(section, getLocation(), "loc");
+    }
+
+    public static CraftingMachine load(ConfigurationSection section){
+        Location loc = Utils.loadLocation(section, "loc");
+        if (loc == null)
+            return null;
+        ItemStack[] iss = new ItemStack[9];
+        for (int i = 0; i < 9; i++)
+            iss[i] = section.getItemStack("items." + i);
+        return new CraftingMachine(loc, iss);
     }
 }
