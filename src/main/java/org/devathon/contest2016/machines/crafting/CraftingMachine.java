@@ -1,9 +1,6 @@
 package org.devathon.contest2016.machines.crafting;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
@@ -162,6 +159,7 @@ public class CraftingMachine implements HoldingMachine, EditableMachine, Saveabl
                     item.setAmount(item.getAmount() - 1);
             }
             setContents(iss);
+            getLocation().getWorld().playEffect(getLocation(), Effect.MOBSPAWNER_FLAMES, 2);
             return getResult();
         }
         return null;
