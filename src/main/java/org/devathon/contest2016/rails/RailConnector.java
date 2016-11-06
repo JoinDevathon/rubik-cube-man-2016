@@ -33,10 +33,8 @@ public enum RailConnector{
     }
 
     public Block getBlockRelative(Block block){
-        block = block.getRelative(direction);
-        if (upper)
-            block = block.getRelative(BlockFace.UP);
-        return block;
+        MachinePart part = getRelative(block);
+        return part == null ? null : part.getLocation().getBlock();
     }
 
     public MachinePart getRelative(Block block){

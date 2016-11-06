@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class ItemHandler{
@@ -22,7 +23,9 @@ public class ItemHandler{
     }
 
     private void startScheduler(Plugin plugin){
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> items.forEach(MovingItem::move), 1L, 1L);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            new HashSet<>(items).forEach(MovingItem::move);
+        }, 1L, 1L);
     }
 
     protected void addItem(MovingItem item){

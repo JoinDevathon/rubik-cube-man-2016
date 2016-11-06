@@ -102,4 +102,8 @@ public class MovingItem{
         else
             item.setPickupDelay(1);
     }
+
+    public Item getItem(){
+        return item;
+    }
 }

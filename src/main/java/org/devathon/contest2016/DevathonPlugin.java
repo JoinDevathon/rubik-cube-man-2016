@@ -1,7 +1,6 @@
 package org.devathon.contest2016;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.devathon.contest2016.containers.BlockChecker;
 import org.devathon.contest2016.items.ItemHandler;
 import org.devathon.contest2016.rails.RailHandler;
 
@@ -9,7 +8,7 @@ public class DevathonPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        new BlockChecker(this);
+        new MachineHandler(this);
         new RailHandler(this);
         new ItemHandler(this);
     }

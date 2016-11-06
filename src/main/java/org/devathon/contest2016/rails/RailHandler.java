@@ -7,8 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.devathon.contest2016.HoldingMachine;
 import org.devathon.contest2016.MachinePart;
-import org.devathon.contest2016.containers.Container;
 import org.devathon.contest2016.items.MovingItem;
 
 public class RailHandler implements Listener{
@@ -26,11 +26,13 @@ public class RailHandler implements Listener{
             RailConnector[] parts = rail.getConnections();
             for (RailConnector connector : parts){
                 MachinePart part = rail.getRelative(connector);
-                if (part instanceof Container){
-                    Container container = (Container) part;
-                    ItemStack stack = container.getAndRemoveFirst();
-                    if (stack != null)
-                        new MovingItem(stack, rail, connector);
+                if (part instanceof HoldingMachine){
+                    HoldingMachine machine = (HoldingMachine) part;
+                    ItemStack[] stack = machine.pullAndRemove();
+                    if (stack != null){
+                        for (ItemStack item : stack)
+                            new MovingItem(item, rail, connector);
+                    }
                     return;
                 }
             }
