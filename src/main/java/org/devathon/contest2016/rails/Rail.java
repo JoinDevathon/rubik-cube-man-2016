@@ -87,4 +87,9 @@ public abstract class Rail implements MachinePart{
     public Location getLocation(){
         return block.getLocation();
     }
+
+    @Override
+    public void broken(){
+        //TODO Drop items on the rail.
+    }
 }

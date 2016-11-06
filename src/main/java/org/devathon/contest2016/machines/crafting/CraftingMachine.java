@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -21,20 +22,19 @@ import java.util.*;
 public class CraftingMachine implements HoldingMachine, EditableMachine{
 
     private static final int RESULT_SLOT = 16;
-    private Block block;
-    private ItemStack[] iss;
-    private Inventory inv;
+    private final Block block;
+    private final ItemStack[] iss;
+    private final Inventory inv;
 
     public CraftingMachine(Block block){
         this.block = block;
-        if (block.hasMetadata("items"))
-            this.iss = (ItemStack[]) block.getMetadata("items").get(0).value();
-        else
+        if (!block.hasMetadata("items")){
             block.setMetadata("items", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), this.iss = new ItemStack[9]));
-        if (block.hasMetadata("inv"))
-            this.inv = (Inventory) block.getMetadata("inv").get(0).value();
-        else
             block.setMetadata("inv", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), this.inv = createInventory()));
+        } else {
+            this.iss = (ItemStack[]) block.getMetadata("items").get(0).value();
+            this.inv = (Inventory) block.getMetadata("inv").get(0).value();
+        }
     }
 
     private Inventory createInventory(){
@@ -272,5 +272,15 @@ public class CraftingMachine implements HoldingMachine, EditableMachine{
     @Override
     public Location getLocation(){
         return block.getLocation();
+    }
+
+    @Override
+    public void broken(){
+        Location loc = block.getLocation();
+        for (ItemStack is : iss){
+            if (is != null)
+                loc.getWorld().dropItemNaturally(loc, is);
+        }
+        block.removeMetadata("craftingmachine", DevathonPlugin.getPlugin(DevathonPlugin.class));
     }
 }

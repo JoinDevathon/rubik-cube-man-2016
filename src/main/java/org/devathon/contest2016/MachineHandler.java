@@ -1,10 +1,13 @@
 package org.devathon.contest2016;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -12,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.devathon.contest2016.machines.crafting.CraftingMachine;
 
 public class MachineHandler implements Listener{
 
@@ -60,5 +64,21 @@ public class MachineHandler implements Listener{
                 machine.click(event);
             }
         }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event){
+        String name = event.getItemInHand().getItemMeta().getDisplayName();
+        if (event.getBlockPlaced().getType() == Material.WORKBENCH && name != null && name.contains("Crafting Machine")){
+            event.getBlock().setMetadata("craftingmachine", new FixedMetadataValue(DevathonPlugin.getPlugin(DevathonPlugin.class), "MasterHub"));
+            new CraftingMachine(event.getBlock());
+        }
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event){
+        MachinePart part = MachinePart.partFromBlock(event.getBlock());
+        if (part != null)
+            part.broken();
     }
 }

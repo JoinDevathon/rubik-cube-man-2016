@@ -19,7 +19,7 @@ public interface MachinePart{
             case CHEST:
                 return new ChestContainer(block);
             case WORKBENCH:
-                //if (block.hasMetadata("craftingmachine"))
+                if (block.hasMetadata("craftingmachine"))
                     return new CraftingMachine(block);
         }
         return null;
@@ -31,4 +31,6 @@ public interface MachinePart{
     }
 
     Location getLocation();
+
+    void broken();
 }

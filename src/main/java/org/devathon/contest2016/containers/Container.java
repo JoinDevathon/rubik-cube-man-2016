@@ -66,6 +66,9 @@ public abstract class Container implements HoldingMachine{
         return block.getLocation();
     }
 
+    @Override
+    public void broken(){}
+
     public abstract ItemStack[] getContents();
 
     public abstract void setContents(ItemStack[] items);
