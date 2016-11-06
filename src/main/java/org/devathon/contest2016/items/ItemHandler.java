@@ -2,6 +2,7 @@ package org.devathon.contest2016.items;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.devathon.contest2016.config.ConfigSaver;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,5 +33,6 @@ public class ItemHandler{
     public void removeItem(MovingItem item, boolean itemAndStand){
         item.removeItem(itemAndStand);
         items.remove(item);
+        ConfigSaver.getInstance().removeObject(item);
     }
 }

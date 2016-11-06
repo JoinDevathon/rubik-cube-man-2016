@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldSaveEvent;
+import org.bukkit.plugin.Plugin;
 import org.devathon.contest2016.DevathonPlugin;
 
 import java.io.File;
@@ -76,6 +77,7 @@ public class ConfigSaver implements Listener{
         DevathonPlugin plugin = DevathonPlugin.getPlugin(DevathonPlugin.class);
         FileConfiguration config = plugin.getConfig();
         config.set("objects", null);
+        saveFile(plugin, config);
         TObjectIntHashMap<Class<? extends SaveableObject>> classCount = new TObjectIntHashMap<>();
         for (SaveableObject object : saveableObjects){
             Class<? extends SaveableObject> clazz = object.getClass();
@@ -84,6 +86,11 @@ public class ConfigSaver implements Listener{
             ConfigurationSection section = plugin.getConfig().createSection(sectionName);
             object.save(section);
         }
+        saveFile(plugin, config);
+    }
+
+    private void saveFile(Plugin plugin, FileConfiguration config){
+
         try {
             config.save(plugin.getDataFolder() + File.separator + "config.yml");
         } catch (IOException e){

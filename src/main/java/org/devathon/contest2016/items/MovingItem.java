@@ -1,13 +1,11 @@
 package org.devathon.contest2016.items;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import org.devathon.contest2016.DevathonPlugin;
 import org.devathon.contest2016.config.SaveableObject;
 import org.devathon.contest2016.config.Utils;
 import org.devathon.contest2016.machines.HoldingMachine;

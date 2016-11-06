@@ -49,8 +49,11 @@ public class DevathonPlugin extends JavaPlugin {
         for (World world : Bukkit.getWorlds()){
             world.getEntities().stream().filter(e -> e instanceof ArmorStand).forEach(e -> {
                 ArmorStand stand = (ArmorStand) e;
-                if (!stand.isVisible())
+                if (!stand.isVisible()){
+                    if (stand.getPassenger() != null)
+                        stand.getPassenger().remove();
                     stand.remove();
+                }
             });
         }
     }

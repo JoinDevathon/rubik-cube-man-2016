@@ -16,6 +16,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.devathon.contest2016.DevathonPlugin;
+import org.devathon.contest2016.config.ConfigSaver;
 import org.devathon.contest2016.config.SaveableObject;
 import org.devathon.contest2016.config.Utils;
 import org.devathon.contest2016.machines.EditableMachine;
@@ -308,6 +309,7 @@ public class CraftingMachine implements HoldingMachine, EditableMachine, Saveabl
         block.removeMetadata("items", DevathonPlugin.getPlugin(DevathonPlugin.class));
         block.removeMetadata("inv", DevathonPlugin.getPlugin(DevathonPlugin.class));
         block.removeMetadata("floatingtext", DevathonPlugin.getPlugin(DevathonPlugin.class));
+        ConfigSaver.getInstance().removeObject(this);
     }
 
     @Override

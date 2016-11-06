@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -21,6 +22,8 @@ import org.bukkit.plugin.Plugin;
 import org.devathon.contest2016.DevathonPlugin;
 import org.devathon.contest2016.config.ConfigSaver;
 import org.devathon.contest2016.machines.crafting.CraftingMachine;
+
+import java.util.Arrays;
 
 public class MachineHandler implements Listener{
 
